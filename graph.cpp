@@ -1,7 +1,6 @@
 // graph.cpp
 //
 // Author: Jon Gautsch
-//
 // Contact: jgautsch@nd.edu
 //
 // Course: CSE 30331, Fall 2013
@@ -11,40 +10,62 @@
 
 using namespace std;
 
+// Constructor. It doesn't do anything notable.
 Graph::Graph() {}
 
+/********************************************************************
+ *	removeNode() :
+ *		Given a node name, add that node from the graph if it
+ *		doesn't already exist
+ ********************************************************************/
 void Graph::addNode(string name)
 {
 	if (!my_graph.count(name)) {
-		Node temp;
-		temp.name = name;
-		my_graph[name] = temp;
+		Node temp;						// Instantiate temporary node
+		temp.name = name;				// Set temp node's name, from param value
+		my_graph[name] = temp;	 		// Add temp node to my_graph
 	}
 }
 
-
+/********************************************************************
+ *	removeNode() :
+ *		Given a node name, delete that node from the graph if it
+ *		exists.
+ ********************************************************************/
 void Graph::removeNode(string name)
 {
-	if (this -> nodeExists(name)) {
-		this -> removeAllEdgesFrom(name);
-		this -> removeAllEdgesTo(name);
-		my_graph.erase(name);
+	if (this -> nodeExists(name)) {			// If the node exists,
+		this -> removeAllEdgesFrom(name);	// remove all edges coming from it,
+		this -> removeAllEdgesTo(name);		// then remove all edges going to it,
+		my_graph.erase(name);				// then remove that node from the graph.
 	}
 }
 
-
+/********************************************************************
+ *	removeAllEdgesFrom() :
+ *		Given a node name, delete all the edges going from that node
+ ********************************************************************/
 void Graph::removeAllEdgesFrom(string name)
 {
-	if (this -> nodeExists(name)) {
-		(my_graph.find(name) -> second).connections.clear();
+	if (this -> nodeExists(name)) {								// If the node exists,
+		(my_graph.find(name) -> second).connections.clear();	// clear out its connections map
 	}
 
 }
 
-
+/********************************************************************
+ *	removeAllEdgesTo() :
+ *		Given a node name, iterate through all nodes and check all
+ * 		their edges. If any of those edges go to the node in question,
+ *		destroy that edge.
+ ********************************************************************/
 void Graph::removeAllEdgesTo(string name)
 {
+	// Iterate through all the nodes in the graph
 	for(main_iterator = my_graph.begin(); main_iterator != my_graph.end(); main_iterator++) {
+
+		// If the current node has an edge to the node in question,
+		// then delete that edge
 		if ((main_iterator -> second).connections.count(name)) {
 			(main_iterator -> second).connections.erase(name);
 		}
@@ -52,6 +73,13 @@ void Graph::removeAllEdgesTo(string name)
 }
 
 
+/********************************************************************
+ *	nodeExists() :
+ *		Given a node name, see if there's a node with that name
+ *		and if there is, return true, else return false
+ *
+ * 	@return [bool] True if node exists, false otherwise.
+ ********************************************************************/
 bool Graph::nodeExists(string name) {
 	if (my_graph.count(name) != 0)
 		return true;
@@ -60,10 +88,20 @@ bool Graph::nodeExists(string name) {
 }
 
 
-
+/********************************************************************
+ *	edgeExists() :
+ *		Given two node names, from and to, check if an edge
+ *		exists between them, and if one does, return true
+ *		else, return false.
+ *
+ *	@return [bool] True if edge exists, false otherwise.
+ ********************************************************************/
 bool Graph::edgeExists(string from, string to)
 {
+	// If the specified 'from' and 'to' nodes both exists,
 	if (this -> nodeExists(from) && this -> nodeExists(to)) {
+
+		// See if there's an edge between the 'from' node to the 'to' node
 		if ((my_graph.find(from) -> second).connections.count(to))
 			return true;
 		else
@@ -80,8 +118,9 @@ bool Graph::edgeExists(string from, string to)
  ********************************************************************/
 void Graph::addOrUpdateEdge(string from, string to, int distance)
 {
+	// If the specified 'from' and 'to' nodes both exists,
 	if (this -> nodeExists(from) && this -> nodeExists(to)) {
-		// If that connection already exists, update distance
+		// if that connection already exists, update distance
 		if (this -> edgeExists(from, to)) {
 			((my_graph.find(from) -> second).connections.find(to) -> second).distance = distance;
 		} else {
@@ -106,9 +145,9 @@ void Graph::addOrUpdateEdge(string from, string to, int distance)
  ********************************************************************/
 int Graph::getEdgeDistance(string from, string to)
 {
-	if (this -> edgeExists(from, to)) {
-		Edge *temp = this -> getEdge(from, to);
-		return temp ->distance;
+	if (this -> edgeExists(from, to)) {				// if the specified edge exists,
+		Edge *temp = this -> getEdge(from, to);		// get a reference to it
+		return temp -> distance;					// and return it's weight/distance
 	}
 	return 0;
 }
@@ -125,7 +164,9 @@ int Graph::getEdgeDistance(string from, string to)
  ********************************************************************/
 Edge* Graph::getEdge(string from, string to)
 {
+	// If the specified edge exists
 	if (this -> edgeExists(from, to)) {
+		// return a reference to the edge between 'from' and 'to'
 		return &((my_graph.find(from) -> second).connections.find(to) -> second);
 	}
 }
@@ -137,8 +178,11 @@ Edge* Graph::getEdge(string from, string to)
  ********************************************************************/
 void Graph::removeEdge(string from, string to)
 {
+	// If node exists,
 	if (my_graph.count(from)) {
+		// And the edge specified exists,
 		if (this -> edgeExists(from, to)) {
+			// Erase that connection/edge
 			(my_graph.find(from) -> second).connections.erase(to);
 		}
 	}

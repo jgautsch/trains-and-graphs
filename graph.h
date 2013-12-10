@@ -23,9 +23,9 @@ struct Edge {
 
 struct Node {
 	string name;
-	map<string, Edge> connections;
-	deque<string> srsly;
-	queue<string> stationed;
+	map<string, Edge> connections;		// Nodes hold a map of edges. The 'to' node is the map key.
+	deque<string> srsly;				// Yeah because a deque makes sense here, but we have to use a queue.
+	queue<string> stationed;			// See above comment
 };
 
 class Graph {
@@ -61,10 +61,10 @@ private:
 	Node getNode(string name);
 
 	// Iterators for iterating over graph
-	map<string, Node>::iterator main_iterator;	// For iterating through nodes
+	map<string, Node>::iterator main_iterator;		// For iterating through nodes
 	map<string, Edge>::iterator sub_iterator;		// For iterating through edges
 
-	map<string, Node> my_graph;		// The map that holds the
+	map<string, Node> my_graph;		// The map that holds the the nodes, which hold the edges
 
 };
 
