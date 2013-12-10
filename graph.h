@@ -33,9 +33,8 @@ public:
 
 
 	Graph();
-	Edge* getEdge(string from, string to);
-	Node getNode(string name);
 
+	// Graph related functions
 	void addNode(string name);
 	void removeNode(string name);
 	void removeAllEdgesFrom(string name);
@@ -47,6 +46,7 @@ public:
 	void removeEdge(string from, string to);
 	void print();
 
+	// Queue related functions
 	void addToStationedQueue(string node, string value);
 	string getNodeQueueFront(string node);
 	void addToTravelingQueue(string from, string to, string value);
@@ -56,11 +56,15 @@ public:
 	void findAndEliminateNodeQueueValue(string value);
 
 private:
+	// Private getters
+	Edge* getEdge(string from, string to);
+	Node getNode(string name);
 
-	map<string, Node>::iterator main_iterator;
-	map<string, Edge>::iterator sub_iterator;
+	// Iterators for iterating over graph
+	map<string, Node>::iterator main_iterator;	// For iterating through nodes
+	map<string, Edge>::iterator sub_iterator;		// For iterating through edges
 
-	map<string, Node> my_graph;
+	map<string, Node> my_graph;		// The map that holds the
 
 };
 
